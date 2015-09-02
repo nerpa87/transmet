@@ -1,4 +1,4 @@
-var _txt, _node, _asterisk;
+var _txt, _node, _asterisk, _pluginEnabled;
 
 goog.require('config');
 goog.require('util');
@@ -66,7 +66,27 @@ function removeOldAsterisk() {
 	}
 }
 
+function onStorageChange(changes, area) {
+	console.log('onStorageChange changes', changes);
+	if (changes.enabled) {
+		_pluginEnabled = changes.enabled.newValue;
+		if (!_pluginEnabled) {
+			removeOldAsterisk();	
+		}
+	}
+}
+
+
+console.log("Plugin init");
+chrome.storage.local.get(function(items) {
+	_pluginEnabled = items.enabled || typeof items.enabled == 'undefined';
+});
+
+chrome.storage.onChanged.addListener(onStorageChange);
+
 document.addEventListener('click', function(e) {
+	if (!_pluginEnabled)
+		return;
 	if (e.target.getAttribute('class') == 'transmet-asterisk') {
 		e.preventDefault();
 		performTranslation();
