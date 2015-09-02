@@ -1,0 +1,4 @@
+.DS_Store
+api_key.txt
+node_modules/
+tools/
