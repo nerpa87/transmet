@@ -2,6 +2,7 @@ var _txt, _node, _asterisk, _pluginEnabled;
 
 goog.require('config');
 goog.require('util');
+goog.require('stats');
 
 function getAsterisk(opts) {
 	opts = opts || {}
@@ -32,6 +33,9 @@ function showTranslation(sresp) {
 	transNode = util.createNode("span", trans, transClass);
 	a.appendChild(transNode);
 	util.addCls(a,'transmet-translated');
+	if (resp.code == 200) {
+		stats.addEntry(_txt, trans);
+	}
 }
 
 function performTranslation() {
@@ -78,7 +82,7 @@ function onStorageChange(changes, area) {
 
 
 console.log("Plugin init");
-chrome.storage.local.get(function(items) {
+chrome.storage.local.get('enabled', function(items) {
 	_pluginEnabled = items.enabled || typeof items.enabled == 'undefined';
 });
 

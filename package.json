@@ -1,12 +1,12 @@
 {
-  "name": "nerpa",
-  "version": "1.0.0",
-  "description": "",
+  "name": "transmet",
+  "version": "0.0.9",
+  "description": "Small (and training) extension for chrome for inline translation",
   "main": "cs.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "nerpa",
   "license": "ISC",
   "dependencies": {
     "node-sass": "^3.3.2"

@@ -11,14 +11,15 @@
       body {
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
         font-size: 100%;
-      }
-      #status {
-        /* avoid an excessively wide status text */
-        white-space: pre;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 400px;
-      }
+	}
+	.title {
+		font-size: .9em;
+	}
+	.description {
+		font-size: .8em;
+	}
+	.buttons button {
+	}
     </style>
 
     <!--
@@ -30,10 +31,12 @@
     <script src="popup.js"></script>
   </head>
   <body>
-  	<h3>In-line translation plugin</h3>
-	<p>Double-click the word you waht to translate</p>
-	<div>
+  	<h3 class="title">Inline translation</h3>
+	<p class="description">Double-click target word to translate</p>
+	<div class="buttons">
 		<button class="btn-on-off" id="switchPluginState">On/Off</button> 
+		<button class="btn-clear" id="clearStats">Clear stats</button> 
+		<button class="btn-stats" id="showStats">Show stats</button> 
 	</div>
   </body>
 </html>
