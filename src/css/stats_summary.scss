@@ -1,0 +1,23 @@
+@import 'mixin/_common';
+.list {
+	list-style: none;
+	&.summary {
+		li span:nth-child(2) {
+			margin-left: 1em;
+		}
+	}
+
+	.trans-entry {
+		height: 1.5em;
+		.translation {
+			display: none;
+		}
+		&:hover {
+			.translation {
+				display: inline;
+				margin-left: 1em;
+				@include trans;
+			}
+		}
+	}
+}

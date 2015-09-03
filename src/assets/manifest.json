@@ -9,11 +9,12 @@
 	},
 	"permissions": [
 		"activeTab",
-		"storage"
+		"storage",
+		"https://translate.yandex.net/"
 	],
 	"content_scripts": [
 		{
-			"matches": ["http://*/*"],
+			"matches": ["http://*/*", "https://*/*"],
 			"css": ["cs.css"],
 			"js": ["cs.js"]
 		}

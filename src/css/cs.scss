@@ -1,3 +1,5 @@
+@import 'mixin/_common';
+
 .transmet-asterisk {
 	position: relative;
 	color: #69f;
@@ -13,13 +15,8 @@
 		position: absolute;
 		top: -0.25em;
 		left: 0;
-		color: #244;
 	    font-size: 1.33em;
-	    font-weight: 300;
-	    background-color: #fafae0;
-	    padding: 0 .5em;
-	    box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.75);
-		line-height:normal;
+		@include trans;
 	}
 
 	&.transmet-translated {

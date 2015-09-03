@@ -9,7 +9,7 @@ var stats = (function(){
 		if (key.length > MAX_KEY_LEN)
 			return;
 		store.get({'stats': []}, function(items) {
-			console.log("1. items", items);
+			//console.log("1. items", items);
 			var data = items.stats
 				,ts = new Date().getTime()
 				,found = false;
@@ -30,19 +30,59 @@ var stats = (function(){
 					tr: translation
 				})
 			}
-			console.log("2. items", items);
+			//console.log("2. items", items);
 			store.set(items, function() {
 				console.log("items set, runtime.lastError", chrome.runtime.lastError);
 			});
 		});
 	}	
 
-	function clear() {
-		store.set({'stats': []});
+	function clear(clb) {
+		store.set({'stats': []}, clb);
 	}
 	
+	function getCountSince(ts, clb) {
+		var count = 0;
+		store.get({'stats': []}, function(items) {
+			var data = items.stats;
+			data.forEach(function(el) {
+				if (el.ts > ts) count++;
+			});
+			clb(count);
+		});
+	}
+
+	function getNLatest(n, clb) {
+		var words = {}, count = 0, worstTs = 0;
+		store.get({'stats': []}, function(items) {
+		    var data = items.stats;
+			data.forEach(function(el) {
+				 var ts = el.ts;
+				 if (count < n || worstTs < ts) {
+				 	if (count == n) {
+						delete words[worstTs];
+						count--;
+					}
+					words[ts] = el;
+					count++;
+					for (var _ts in words) {
+						worstTs = (_ts < worstTs) ? _ts : worstTs;
+					}
+				 }
+		    });
+			var out = [];
+			for (var _ts in words) {
+				out.push(words[_ts]);
+			}
+			out.sort(function(a,b){return a.ts<b.ts ? 1 : -1});
+			clb(out);
+        });
+	}
+
 	return {
-		addEntry: addEntry
-		,clear: clear
+		addEntry: addEntry,
+		getCountSince: getCountSince,
+		getNLatest: getNLatest,
+		clear: clear
 	}
 })();

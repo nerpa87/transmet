@@ -44,18 +44,9 @@ function setupOnOffBtn() {
 	});
 }
 
-function setupClearStats() {
-	document.getElementById('clearStats').addEventListener('click', function() {
-		stats.clear();
-	});
-}
-
 function showStats() {
-	var newWin = window.open("","stats",
-	    "width=420,height=230,resizable=yes,scrollbars=yes,status=yes"
-	);
-	newWin.document.body.innerHTML = '';
-	newWin.document.write('Stats here!');
+	var url = 'chrome-extension://' + chrome.runtime.id + '/stats.html';
+	var newWin = window.open(url, "stats",  "width=420,height=500,top=" + Math.max(0,window.screenY - 100) + ",left=" + Math.max(0, window.screenX - 300) + ",resizable=yes,scrollbars=yes,status=yes");
 }
 
 function setupShowStats() {

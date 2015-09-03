@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<title>Translation statistics</title>
+		<link rel="stylesheet" href="stats_summary.css" />
+		<script src="stats_summary.js"></script>
+	</head>
+	<body>
+		<h3>Words translated</h3>	
+		<ul class="list summary" id="list_summary">
+			<li>
+				<span class="label">Total</span><span class="total"></span>
+			</li>
+			<li>
+			     <span class="label">Last day</span><span class="day"></span>
+			</li>
+		</ul>
+		<h3>Recent</h3>
+		<ul class="list trans-list" id="list_recent">
+			<li class="trans-entry"><span class="word"></span><span class="translation"></span></li>
+		</ul>
+		<button class="btn-clear" id="clearStats">Clear stats</button> 
+	</body>
+</html>

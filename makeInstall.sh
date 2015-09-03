@@ -24,7 +24,16 @@ if ! echo $PATH | grep -q node-sass; then
 	export PATH=$PATH:./node_modules/node-sass/bin	
 fi
 rm -r ./plugin; mkdir plugin
-node-sass ./src/css/cs.scss ./plugin/cs.css
-java -jar tools/compiler.jar --js src/js/cs.js --js src/js/helpers/*.js --js_output_file plugin/cs.js
-java -jar tools/compiler.jar --js src/js/popup.js --js src/js/helpers/*.js --js_output_file plugin/popup.js
+#node-sass ./src/css/cs.scss ./plugin/cs.css
+for file in `ls -p ./src/css | grep -v /`; do
+	if (echo $file | grep -q '.scss'); then
+		target_file=`echo $file | sed 's/\.scss/.css/'`
+		node-sass ./src/css/$file ./plugin/$target_file
+	fi
+done
+for file in `ls -p ./src/js | grep -v /`; do
+	if (echo $file | grep -q '.js'); then
+		java -jar tools/compiler.jar --js src/js/$file --js src/js/helpers/*.js --js_output_file plugin/$file
+	fi
+done
 cp ./src/assets/* ./plugin

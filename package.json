@@ -10,5 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "node-sass": "^3.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:nerpa87/transmet.git"
   }
 }
