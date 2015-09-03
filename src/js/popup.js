@@ -1,47 +1,26 @@
-var appSettings = {};
-
 goog.require('stats');
 
-function onBtnClick(evt) {
-	var btn = evt.target;
-	appSettings.enabled = !appSettings.enabled;
-	chrome.storage.local.set(appSettings);
+function onOnOffBtnClick(evt) {
+	var btn = evt.target
+		,attr = btn.getAttribute('data-enabled')
+		,enabled = attr == 'enabled';
+	setOnOffBtnState(enabled);
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {"command": "setPluginState", "data": enabled}); 
+	});
 }
 
-function updateBtnState() {
-	console.log('updateBtnState appSettings:', appSettings);
+function setOnOffBtnState(enabled) {
+	console.log('updateBtnState enabled:', enabled);
 	var	btn = getOnOffBtn();
-	var text = (appSettings.enabled) ? 'OFF' : 'ON';
+	var text = (enabled) ? 'OFF' : 'ON'
+		,attr = (enabled) ? 'disabled' : 'enabled';
 	btn.innerHTML = text;
-}
-
-function onStorageChange(changes, area) {
-	console.log('onStorageChange changes', changes);
-	for (var i in changes) {
-		appSettings[i] = changes[i].newValue;
-	}
-	console.log('new appSettings', appSettings);
-	if (changes.enabled) {
-		updateBtnState();
-	}
+	btn.setAttribute('data-enabled',attr);
 }
 
 function getOnOffBtn() {
 	return document.getElementById('switchPluginState');
-}
-
-function setupOnOffBtn() {
-	chrome.storage.local.get('enabled',function(settings) {
-		if (typeof settings.enabled == 'undefined') {
-			settings.enabled = true;
-			chrome.storage.local.set(settings);
-		}
-		appSettings = settings;
-
-		var btn = getOnOffBtn();
-		updateBtnState();
-		btn.addEventListener('click', onBtnClick);
-	});
 }
 
 function showStats() {
@@ -54,8 +33,16 @@ function setupShowStats() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-	chrome.storage.onChanged.addListener(onStorageChange);
-	setupOnOffBtn();
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		console.log("activetab detected", tabs[0]);
+		chrome.tabs.sendMessage(tabs[0].id, {"command": "getPluginState"}, function(response) {
+			console.log("response received", response);
+			setOnOffBtnState(response.data);
+			var btn = getOnOffBtn();
+			btn.addEventListener('click', onOnOffBtnClick);
+		});
+	});
+	
 	setupShowStats();
 });
 

@@ -2,14 +2,17 @@
 
 .transmet-asterisk {
 	position: relative;
-	color: #69f;
+	display: inline-block;
+	color: #15f;
+	background-color: rgba(255, 255, 255, 0.7);
 	cursor: pointer;
-	padding: 0 1em;
 	vertical-align: top;
 	font-style: normal;
 	font-weight: 600;
 	font-size: 0.75em;
 	line-height: 1em;
+	margin: -.6em -.8em 0 -.4em;
+	min-width: 1.2em;
 
 	& > span {
 		position: absolute;

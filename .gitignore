@@ -4,3 +4,4 @@ node_modules/
 tools/
 plugin/
 src/js/config.js
+src/js/helpers/config.js

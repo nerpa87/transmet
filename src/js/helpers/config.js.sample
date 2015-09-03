@@ -3,5 +3,6 @@ goog.provide('config');
 var config = {
 	API_KEY : EXPORT_API_KEY 
     ,RPC_URL : 'https://translate.yandex.net/api/v1.5/tr.json/translate?key={API_KEY}&lang={FROM_LANG}-{TO_LANG}&text={TEXT}'
+	,DEFAULT_ENABLED: true
 }
 

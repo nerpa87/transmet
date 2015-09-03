@@ -70,23 +70,22 @@ function removeOldAsterisk() {
 	}
 }
 
-function onStorageChange(changes, area) {
-	console.log('onStorageChange changes', changes);
-	if (changes.enabled) {
-		_pluginEnabled = changes.enabled.newValue;
-		if (!_pluginEnabled) {
-			removeOldAsterisk();	
-		}
-	}
-}
-
-
 console.log("Plugin init");
-chrome.storage.local.get('enabled', function(items) {
-	_pluginEnabled = items.enabled || typeof items.enabled == 'undefined';
+chrome.storage.local.get({'enabled': config.DEFAULT_ENABLED}, function(items) {
+	console.log("_pluginEnabled from items, items:", items);
+	_pluginEnabled = items.enabled;
 });
-
-chrome.storage.onChanged.addListener(onStorageChange);
+chrome.runtime.onMessage.addListener(function(message, sender, callback) {
+	console.log("Message received:", message, "; _pluginEnabled:", _pluginEnabled);
+	if (message.command == "getPluginState") {
+		callback({"data": _pluginEnabled});
+	} else if (message.command == "setPluginState") {
+		_pluginEnabled = message.data;
+		if (!_pluginEnabled) {
+	        removeOldAsterisk();
+        }
+	}
+});
 
 document.addEventListener('click', function(e) {
 	if (!_pluginEnabled)
