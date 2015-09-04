@@ -6,3 +6,21 @@
     box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.75);
 	line-height:normal;
 }
+
+@mixin buttons_block {
+	&:last-child {
+		display:block;
+		float:right;
+		&:after {
+			content: '';
+			clear: both;
+		}
+	}
+}
+
+@mixin button {
+	height: 2em;
+	&:focus {
+	    outline:0;
+    }
+}

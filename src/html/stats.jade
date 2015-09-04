@@ -1,0 +1,29 @@
+mixin trans_entry
+	li.trans-entry
+		span.word
+		span.translation
+html
+	head
+		title Translation statistics
+		link(rel="stylesheet", href="stats_summary.css")
+		script(src="stats_summary.js")
+	body
+		h3 Summary
+		ul.list.summary#list_summary
+			each name, key in {"total": "Total", "week": "Last week", "day": "Last day"}
+				li
+					span.label= name
+					span(class=key)
+		.two-cols
+			.col
+				h3 Recent
+				ul.list.trans-list#list_recent
+					+trans_entry
+			.col
+				h3 Popular
+				ul.list.trans-list#list_popular
+					+trans_entry
+
+		.buttons
+			button.btn-close#close Close window							
+			button.btn-clear#clearStats Empty stats

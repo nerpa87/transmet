@@ -1,6 +1,11 @@
 @import 'mixin/_common';
+body {
+	padding: 0 2em;
+}
 .list {
 	list-style: none;
+	padding-left: 1em;
+	
 	&.summary {
 		li span:nth-child(2) {
 			margin-left: 1em;
@@ -8,9 +13,18 @@
 	}
 
 	.trans-entry {
-		height: 1.5em;
+		position: relative;
+		height: 1.75em;
+		.word, .translation {
+			white-space: nowrap;
+		}
+		.word {
+			line-height: 1.75em;
+		}
 		.translation {
 			display: none;
+			position: absolute;
+			z-index: 1;
 		}
 		&:hover {
 			.translation {
@@ -20,4 +34,35 @@
 			}
 		}
 	}
+}
+.two-cols {
+	.col {
+		width: 50%;
+		float: left;
+	}
+	&:after {
+		display: block;
+		content: '';
+		clear: both;
+	}
+}
+.buttons {
+	margin-top: 3.5em;
+	
+	button {
+		@include button;
+		@include buttons_block;
+	
+		&.btn-clear {
+			color: #dfc;
+			border-color: #b00;
+			background: linear-gradient(to bottom, rgba(158,20,29,1) 0%, rgba(255,76,76,1) 100%);
+			&:hover {
+				color: #fff;
+				border-color: #a00;
+			}
+		}
+
+	}
+
 }

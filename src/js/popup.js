@@ -13,10 +13,12 @@ function onOnOffBtnClick(evt) {
 function setOnOffBtnState(enabled) {
 	console.log('updateBtnState enabled:', enabled);
 	var	btn = getOnOffBtn();
-	var text = (enabled) ? 'OFF' : 'ON'
-		,attr = (enabled) ? 'disabled' : 'enabled';
+	var text = (enabled) ? 'off' : 'on'
+		,attr = (enabled) ? 'disabled' : 'enabled'
+		,cls = (enabled) ? 'btn-disable' : 'btn-enable';
 	btn.innerHTML = text;
 	btn.setAttribute('data-enabled',attr);
+	btn.setAttribute('class', cls);
 }
 
 function getOnOffBtn() {
@@ -36,8 +38,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		console.log("activetab detected", tabs[0]);
 		chrome.tabs.sendMessage(tabs[0].id, {"command": "getPluginState"}, function(response) {
-			console.log("response received", response);
-			setOnOffBtnState(response.data);
+			if (!response) {
+				console.warn("No response received, lastError", chrome.runtime.lastError);
+				chrome.storage.local.get({'enabled': config.DEFAULT_ENABLED}, function(items) {
+				setOnOffBtnState(items.enabled);		
+				});
+			} else {
+				setOnOffBtnState(response.data);
+			}
 			var btn = getOnOffBtn();
 			btn.addEventListener('click', onOnOffBtnClick);
 		});

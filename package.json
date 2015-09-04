@@ -9,6 +9,7 @@
   "author": "nerpa",
   "license": "ISC",
   "dependencies": {
+    "jade": "^1.11.0",
     "node-sass": "^3.3.2"
   },
   "repository": {

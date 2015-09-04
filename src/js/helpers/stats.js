@@ -79,10 +79,19 @@ var stats = (function(){
         });
 	}
 
+	function getNPopular(n, clb) {
+		store.get({'stats': []}, function(items) {
+		    var data = items.stats;
+			var out = data.sort(function(a,b) {return a.cnt < b.cnt ? 1 : -1}).splice(0, n);
+			clb(out);
+		});	
+	}
+
 	return {
 		addEntry: addEntry,
 		getCountSince: getCountSince,
 		getNLatest: getNLatest,
+		getNPopular: getNPopular,
 		clear: clear
 	}
 })();

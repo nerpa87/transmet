@@ -20,8 +20,11 @@ sed "s/EXPORT_API_KEY/'${API_KEY}'/" ./config.js.sample > ./config.js
 cd ../../../
 
 #building
-if ! echo $PATH | grep -q node-sass; then
+if ! echo $PATH | grep -q /node-sass/; then
 	export PATH=$PATH:./node_modules/node-sass/bin	
+fi
+if ! echo $PATH | grep -q /jade/; then
+	export PATH=$PATH:./node_modules/jade/bin	
 fi
 rm -r ./plugin; mkdir plugin
 #node-sass ./src/css/cs.scss ./plugin/cs.css
@@ -29,6 +32,11 @@ for file in `ls -p ./src/css | grep -v /`; do
 	if (echo $file | grep -q '.scss'); then
 		target_file=`echo $file | sed 's/\.scss/.css/'`
 		node-sass ./src/css/$file ./plugin/$target_file
+	fi
+done
+for file in `ls -p ./src/html | grep -v /`; do
+	if (echo $file | grep -q '.jade'); then
+		jade.js ./src/html/$file -o ./plugin -P
 	fi
 done
 for file in `ls -p ./src/js | grep -v /`; do

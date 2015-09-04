@@ -8,6 +8,29 @@ function setupClearStats() {
     });
 }
 
+function setupWindowClose() {
+   document.getElementById('close').addEventListener('click', window.close.bind(window));
+}
+
+function fillList(listId, functionName, n, opts) {
+	opts = opts || {};
+	if (typeof opts.renderWord != 'function') {
+		opts.renderWord = function(el) {return el.k}
+	}
+	var node = document.querySelector('#' + listId + ' .trans-entry')
+        ,p = node.parentNode;
+    p.removeChild(node);
+    stats[functionName](n, function(arr) {
+        arr.forEach(function(el) {
+           var n = node.cloneNode(true);
+           n.querySelector('.word').innerText =  opts.renderWord(el);
+           n.querySelector('.translation').innerText = el.tr;
+           p.appendChild(n);
+       });
+       node = null;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	//html content filling
 	stats.getCountSince(0, function(c) {
@@ -17,19 +40,18 @@ document.addEventListener('DOMContentLoaded', function() {
 	stats.getCountSince(lastDay, function(c) {
 		document.querySelector('#list_summary .day').innerText = c;	
 	});	
+	var lastWeek = new Date().getTime() - 7*86400000; 
+	stats.getCountSince(lastWeek, function(c) {
+		document.querySelector('#list_summary .week').innerText = c;	
+	});	
 
-	var node = document.querySelector('#list_recent .trans-entry')
-		,p = node.parentNode;
-    p.removeChild(node);	
-	stats.getNLatest(10, function(arr) {
-		arr.forEach(function(el) {
-			var n = node.cloneNode(true);
-			n.querySelector('.word').innerText = el.k;
-			n.querySelector('.translation').innerText = el.tr;
-			p.appendChild(n);
-		});
-		node = null;
+	fillList('list_recent', 'getNLatest', 10);
+	fillList('list_popular', 'getNPopular', 10, {
+		renderWord: function(el) {
+			return el.k + ' (' + el.cnt + ')'			
+		}
 	});
-	//clear handler
+	
 	setupClearStats();
+	setupWindowClose();
 });
