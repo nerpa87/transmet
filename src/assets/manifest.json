@@ -18,5 +18,6 @@
 			"css": ["cs.css"],
 			"js": ["cs.js"]
 		}
-	]
+	],
+	"options_page": "options.html"
 }
