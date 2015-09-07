@@ -33,11 +33,39 @@ var util = (function() {
 		return node;
 	}
 
+	function addCopyright(targetNode, copyKey) {
+		copyKey = copyKey || 'COPY_TEXT';
+    	var copy_text = config[copyKey]
+        	,copyLink, copy, arr;
+    	if (arr = /<a(.*?)>(.*?)<\/a>/.exec(copy_text)) {
+        	copyLink = util.createNode('a', arr[2], '');
+        	var attrs = arr[1].split(/\s+/);
+	        attrs.forEach(function(el) {
+    	        if (el) {
+        	        var pair = el.split('=');
+            	    copyLink.setAttribute(pair[0], pair[1].replace(/[",']/g,''));
+            	}
+	        });
+    	    var texts = copy_text.split(/<a.*>/);
+        	copy = util.createNode("span", '', 'trans-copy');
+	        copy.appendChild(document.createTextNode(texts[0]));
+    	    copy.appendChild(copyLink);
+        	copy.appendChild(document.createTextNode(texts[1]));
+    	} else {
+        	copy = util.createNode("span", config.COPY_TEXT, 'trans-copy');
+    	}
+    	var copyWrap = util.createNode("i", '', 'trans-copy-wrap');
+    	copyWrap.appendChild(copy);
+    	targetNode.appendChild(copyWrap);
+		return copyWrap;
+	}
+
 	return {
 		getFromLang: getFromLang,
 		getToLang: getToLang,
 		addCls: addCls,
 		removeCls: removeCls,
-		createNode: createNode
+		createNode: createNode,
+		addCopyright: addCopyright
 	}
 })();

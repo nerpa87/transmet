@@ -8,6 +8,7 @@ var stats = (function(){
 	function addEntry(key, translation) {
 		if (key.length > MAX_KEY_LEN)
 			return;
+		key = key.toLowerCase();
 		store.get({'stats': []}, function(items) {
 			//console.log("1. items", items);
 			var data = items.stats
@@ -59,14 +60,15 @@ var stats = (function(){
 			data.forEach(function(el) {
 				 var ts = el.ts;
 				 if (count < n || worstTs < ts) {
-				 	if (count == n) {
+				 	if (count >= n) {
 						delete words[worstTs];
+						worstTs = 0;
 						count--;
 					}
 					words[ts] = el;
 					count++;
 					for (var _ts in words) {
-						worstTs = (_ts < worstTs) ? _ts : worstTs;
+						worstTs = (_ts < worstTs || !worstTs) ? _ts : worstTs;
 					}
 				 }
 		    });

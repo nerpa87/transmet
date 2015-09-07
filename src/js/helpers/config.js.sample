@@ -4,5 +4,7 @@ var config = {
 	API_KEY : EXPORT_API_KEY 
     ,RPC_URL : 'https://translate.yandex.net/api/v1.5/tr.json/translate?key={API_KEY}&lang={FROM_LANG}-{TO_LANG}&text={TEXT}'
 	,DEFAULT_ENABLED: true
+	,COPY_TEXT : 'Translated by <a target="_blank" href="http://translate.yandex.ru/">Yandex.Translate</a> service'
+	,COPY_TEXT_POPUP : 'All translations are made with <a target="_blank" href="http://translate.yandex.ru/">Yandex.Translate</a>'
 }
 

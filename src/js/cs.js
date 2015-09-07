@@ -1,4 +1,4 @@
-var _txt, _node, _asterisk, _pluginEnabled;
+var _txt, _node, _asterisk, _pluginEnabled, _copyAwared;
 
 goog.require('config');
 goog.require('util');
@@ -15,8 +15,19 @@ function getAsterisk(opts) {
 		}
 		return _asterisk;	
 	}
-	_asterisk = util.createNode("i", "_t", "transmet-asterisk");
+	_asterisk = util.createNode("div", "_t", "transmet-asterisk");
 	return _asterisk;
+}
+
+function addCopyright(targetNode) {
+	var copyWrap = util.addCopyright(targetNode);
+	copyWrap.addEventListener('click', function(evt) {
+		evt.stopPropagation();
+		if (evt.target == copyWrap) {
+			copyWrap.parentNode.removeChild(copyWrap);
+			chrome.storage.local.set({'copy_awared': true});
+		}
+	});
 }
 
 function showTranslation(sresp) {
@@ -32,6 +43,9 @@ function showTranslation(sresp) {
 	var a = getAsterisk(),
 	transNode = util.createNode("span", trans, transClass);
 	a.appendChild(transNode);
+	if (!_copyAwared) {
+		addCopyright(a);
+	}
 	util.addCls(a,'transmet-translated');
 	if (resp.code == 200) {
 		stats.addEntry(_txt, trans);
@@ -71,9 +85,9 @@ function removeOldAsterisk() {
 }
 
 console.log("Plugin init");
-chrome.storage.local.get({'enabled': config.DEFAULT_ENABLED}, function(items) {
-	console.log("_pluginEnabled from items, items:", items);
+chrome.storage.local.get({'enabled': config.DEFAULT_ENABLED, 'copy_awared': false}, function(items) {
 	_pluginEnabled = items.enabled;
+	_copyAwared = items.copy_awared;
 });
 chrome.runtime.onMessage.addListener(function(message, sender, callback) {
 	console.log("Message received:", message, "; _pluginEnabled:", _pluginEnabled);
@@ -84,6 +98,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, callback) {
 		if (!_pluginEnabled) {
 	        removeOldAsterisk();
         }
+	}
+});
+chrome.storage.onChanged.addListener(function(changes) {
+	if (changes['copy_awared']) {
+		_copyAwared = changes['copy_awared'];
 	}
 });
 
@@ -103,7 +122,6 @@ document.addEventListener('click', function(e) {
 	    if (a.childNodes[0] == sel.focusNode) {
 			return; //_t is in range
 		}
-		//console.log('sel.focusNode', sel.focusNode, "a", a, "a.text==sel.f", a.childNodes[0] == sel.focusNode);
 		_txt = txt;
 	    console.log('_txt set to: "' + _txt + '"');
 	    _node = sel.focusNode.parentNode;

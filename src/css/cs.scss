@@ -14,12 +14,36 @@
 	margin: -.6em -.8em 0 -.4em;
 	min-width: 1.2em;
 
-	& > span {
+	& > span, .trans-copy-wrap {
 		position: absolute;
 		top: -0.25em;
 		left: 0;
 	    font-size: 1.33em;
+		white-space: nowrap;
+		cursor: default;
 		@include trans;
+	}
+
+	.trans-copy-wrap {
+	    top: 1em;
+		visibility: visible;
+		padding-right: 1.4em;
+		&:after {
+			display: block;
+			float:right;
+			font-style: normal;
+			content: '\2716';
+			width: 1em;
+			height: 1em;
+			line-height: 1.4em;
+			font-size: .85em;
+			margin-right: -1.4em;
+			cursor: pointer;
+			color: #00a;
+			&:hover {
+				color: #00f;
+			}
+		}
 	}
 
 	&.transmet-translated {

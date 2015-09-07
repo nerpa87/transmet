@@ -52,5 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	setupShowStats();
+
+	util.addCopyright(document.getElementById('copyBlock'), 'COPY_TEXT_POPUP');
 });
 
